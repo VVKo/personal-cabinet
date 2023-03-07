@@ -1,10 +1,6 @@
 import jwt_decode from "jwt-decode";
 const APIs = {
-    CRUD_API: 'https://script.google.com/macros/s/AKfycbzef_y4t0K8aYk30ifIO5z1eM30WPsnZpxCFUqNrHqY48vASre-z3TnYLRq2W88DmAc/exec',
-    rozkladChNU_API:
-        'https://script.google.com/macros/s/AKfycbzthxLojygkg-2czBL9iGG8BIQ7rFKE67_vUI2d0XF8IRjfPFG-eGI_Vg2WhoQ3qec/exec',
-    driver_API:
-        'https://script.google.com/macros/s/AKfycbzPGSRA_iPCjt5IwrgY4AxPuCoKuP5gofysbI79ovilw_vob9UeHMD1ZzZoVicUhoA1/exec',
+    CRUD_API: 'https://script.google.com/macros/s/AKfycbwgZrq5_5XIb4bmKQCJibfZF2CEDZVtCrcr4CBUn6EDkTnxHuKd3ZPkEDzcihMxxO3N/exec',
 };
 
 export const getDataFromAPI = async (API, action, jsonTxt) => {
@@ -24,7 +20,13 @@ export const postDataFromAPI = async (API, action, obj) => {
 
     const settings = {
         method: 'POST',
+        // mode: 'no-cors',
         cache: 'no-cache',
+        // headers: {
+        //     'Access-Control-Allow-Origin': '*',
+        //     'Accept': 'application/json',
+        //     'Content-Type': 'application/json;charset=UTF-8'
+        // },
         redirect: 'follow',
         body: JSON.stringify(obj)
     }
@@ -34,7 +36,7 @@ export const postDataFromAPI = async (API, action, obj) => {
     const rrr = await response.json();
     console.log('rrr',rrr)
     const {token} = rrr
-
+    console.log(jwt_decode(token))
     return jwt_decode(token)
 
 };

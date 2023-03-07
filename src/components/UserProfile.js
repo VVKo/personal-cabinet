@@ -6,8 +6,8 @@ import { useStateContext } from '../contexts/ContextProvider';
 
 
 const UserProfile = () => {
-  const { currentColor, user, setUser } = useStateContext();
-
+  const {state, currentColor } = useStateContext();
+    const {user} = state
   return (
     <div className="nav-item absolute right-1 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
       <div className="flex justify-between items-center">
@@ -57,9 +57,6 @@ const UserProfile = () => {
           text="Вийти"
           borderRadius="10px"
           width="full"
-          onClick={()=>{
-              console.log('Logout')
-              setUser({})}}
         />
       </div>
     </div>

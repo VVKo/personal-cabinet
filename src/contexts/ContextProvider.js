@@ -2,6 +2,8 @@ import {createContext, useContext, useState, useReducer, useEffect} from 'react'
 import ContextReducer from "./ContextReducer";
 import {postDataFromAPI} from "../data/Utils";
 
+
+
 const StateContext = createContext();
 
 const initialState = {
@@ -10,8 +12,17 @@ const initialState = {
   userProfile: false,
   notification: false,
   loading: false,
+  showModal: false,
+    dataForModal: {
+        title: 'title',
+        body: { func: '', data: {} },
+    },
 };
 
+const cury = new Date().getFullYear()
+const curm = new Date().getMonth()
+
+const curacyear = `${curm > 7 ? cury : cury - 1}-${curm > 7 ? cury + 1 : cury}`
 export const ContextProvider = ({ children }) => {
   const [screenSize, setScreenSize] = useState(undefined);
   const [currentColor, setCurrentColor] = useState('#03C9D7');
@@ -19,7 +30,6 @@ export const ContextProvider = ({ children }) => {
   const [themeSettings, setThemeSettings] = useState(false);
   const [activeMenu, setActiveMenu] = useState(true);
   const [isClicked, setIsClicked] = useState(initialState);
-  const [user, setUser] = useState({})
 
   const [state, dispatch] = useReducer(ContextReducer,initialState)
   const updateContext = (type, payload) =>
@@ -27,8 +37,8 @@ export const ContextProvider = ({ children }) => {
         type,
         payload,
       });
-  const setLoading = (msg, newtoast) =>
-      dispatch({ type: 'SET_LOADING', payload: { msg, newtoast } });
+  const setLoading = (msg, newtoast) => {
+      dispatch({ type: 'SET_LOADING', payload: { msg, newtoast } })};
   const updateToast = (status, newtoast) =>
       dispatch({
         type: 'UPDATE',
@@ -39,12 +49,36 @@ export const ContextProvider = ({ children }) => {
         },
       });
 
+  const setShowModal = val => dispatch({ type: 'SET_SHOWMODAL', payload: val });
+    const setDataForModal = obj =>
+        dispatch({ type: 'SET_DATAFORMODAL', payload: obj });
+  const login = (obj) => {
+    updateContext('LOGIN', {...obj})
+  }
+  const logout = () => {
+    updateContext('LOGOUT', {})
+  }
+
   const getAcademicYears = () => {
-    const toastName = 'acYears';
+    const toastName = 'toastGETLISTOFACADEMICYEARS';
     const API = 'CRUD_API';
     const action = 'GETLISTOFACADEMICYEARS';
     setLoading('Завантажуємо навчальні роки ...', toastName);
     postDataFromAPI(API, action, {}).then(resp => {
+      updateContext(action, resp.data);
+      updateToast(resp.status, toastName);
+      updateContext('SET_CURRENT_YEAR', resp.data.filter(y => y.name === curacyear)[0])
+    });
+  };
+
+  const getStaff = () => {
+    const toastName = 'toastGETSTAFF';
+    const API = 'CRUD_API';
+    const action = 'GETSTAFF';
+    setLoading('Завантажуємо співробітників ...', toastName);
+    const {token} = state.user
+    const xlsId = '1jAs0Oa3vb0cNGXQB83aMvAR02aPmsI16yz5Rf59mmxI'
+    postDataFromAPI(API, action, {token, data:{xlsId}}).then(resp => {
       updateContext(action, resp.data);
       updateToast(resp.status, toastName);
     });
@@ -61,13 +95,42 @@ export const ContextProvider = ({ children }) => {
   };
 
   const handleClick = (clicked) => setIsClicked({ ...initialState, [clicked]: true });
+
+
   useEffect(()=>{
-    console.log('ContextProvider')
+    console.log('ContextProvider', 'getAcademicYears')
     getAcademicYears()
   },[])
+
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
-    <StateContext.Provider value={{ state, user, getAcademicYears, setUser, currentColor, currentMode, activeMenu, screenSize, setScreenSize, handleClick, isClicked, initialState, setIsClicked, setActiveMenu, setCurrentColor, setCurrentMode, setMode, setColor, themeSettings, setThemeSettings }}>
+    <StateContext.Provider
+        value={{
+          state,
+          updateContext,
+          login,
+          logout,
+          getAcademicYears,
+          getStaff,
+          currentColor,
+          currentMode,
+          activeMenu,
+          screenSize,
+          setScreenSize,
+          handleClick,
+          isClicked,
+          initialState,
+          setIsClicked,
+          setActiveMenu,
+          setCurrentColor,
+          setCurrentMode,
+          setMode,
+          setColor,
+          themeSettings,
+          setThemeSettings,
+          setShowModal,
+            setDataForModal
+    }}>
       {children}
     </StateContext.Provider>
   );

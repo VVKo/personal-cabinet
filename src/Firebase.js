@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 import { postDataFromAPI } from "./data/Utils";
+import {useStateContext} from "./contexts/ContextProvider";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -20,7 +21,11 @@ export const auth = getAuth(app);
 
 const provider = new GoogleAuthProvider();
 
-export const signInWithGoogle = (setUser) => {
+export const signInWithGoogle = (func, obj) => {
+
+
+    console.log('signInWithGoogle', func, obj)
+
     signInWithPopup(auth, provider)
         .then((result) => {
 
@@ -28,7 +33,7 @@ export const signInWithGoogle = (setUser) => {
 
             const {photoURL, displayName} = result.user
 
-            postDataFromAPI('CRUD_API',"ROLES",{token, data:{} }).then(resp => setUser({photoURL, displayName, ...resp}))
+            postDataFromAPI('CRUD_API',"ROLES",{token, data:{...obj} }).then(resp => func({photoURL, displayName, ...resp, token}))
 
 
         })

@@ -2,11 +2,21 @@ import { toast } from 'react-toastify';
 
 const ContextReducer = (state, action) => {
     switch (action.type){
+        case 'LOGIN':
+            return {
+                ...state,
+                user: action.payload
+            };
+        case 'LOGOUT':
+            return {
+                ...state,
+                user: undefined
+            };
         case 'SET_LOADING':
             return {
                 ...state,
                 loading: true,
-                [action.payload.newtoast]: toast.loading(action.payload.msg),
+                [action.payload.newtoast]: toast.loading(action.payload.msg, {toastId: action.payload.newtoast }),
             };
         case 'UPDATE':
             return {
@@ -29,7 +39,26 @@ const ContextReducer = (state, action) => {
         ...state,
             academicYears: action.payload,
         };
-
+        case 'GETSTAFF':
+            return {
+                ...state,
+                staff: action.payload,
+            }
+        case 'SET_CURRENT_YEAR':
+            return {
+                ...state,
+                currentAcademicYear: action.payload
+            }
+        case 'SET_SHOWMODAL':
+            return {
+                ...state,
+                showModal: action.payload,
+            };
+        case 'SET_DATAFORMODAL':
+            return {
+                ...state,
+                dataForModal: action.payload,
+            };
         default:
             return state
     }
