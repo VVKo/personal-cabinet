@@ -3,7 +3,7 @@ import Button from "../../components/Button";
 import {useStateContext} from "../../contexts/ContextProvider";
 
 const Roles = () => {
-    const { currentColor, currentMode } = useStateContext();
+    const { currentColor } = useStateContext();
     return (
         <div className="mt-4">
             <div className="flex flex-wrap lg:flex-nowrap justify-between ">
