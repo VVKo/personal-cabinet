@@ -32,7 +32,14 @@ const ContextReducer = (state, action) => {
                     }
                 ),
             };
-
+        case 'UPDATEROW':
+            return {
+                ...state,
+                staff: {
+                    ...state.staff,
+                    rows: action.payload
+                }
+            }
         case 'GETLISTOFACADEMICYEARS':
             return {
 

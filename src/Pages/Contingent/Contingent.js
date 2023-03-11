@@ -5,11 +5,14 @@ import Students from "./Students";
 import Staff from "./Staff";
 
 const Contingent = () => {
-    const {contingentId} = useParams()
+
     return (
         <>
-            {contingentId}
-<Outlet />
+            <h1>Контингент</h1>
+            <Routes>
+                <Route path='students' element={<Students />}/>
+                <Route path='staff' element={<Staff />}/>
+            </Routes>
         </>
     );
 };

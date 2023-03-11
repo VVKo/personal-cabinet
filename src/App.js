@@ -14,8 +14,6 @@ import {useStateContext} from "./contexts/ContextProvider";
 import ThemeSettings from "./components/ThemeSettings";
 import Protected from "./components/Protected";
 import Test from "./Pages/Test";
-import Students from "./Pages/Contingent/Students";
-import Staff from "./Pages/Contingent/Staff";
 import Config from './Pages/Config/Config'
 import Contingent from "./Pages/Contingent/Contingent";
 import Roles from "./Pages/Config/Roles";
@@ -65,10 +63,7 @@ const App = () => {
                             </Route>
                         </Route>
                         <Route path="/contingent" element={<Protected/>} >
-                            <Route path='/contingent' element={<Contingent />}>
-                                <Route path='students' element={<Students />}/>
-                                <Route path='staff' element={<Staff />}/>
-                            </Route>
+                            <Route path='/contingent/*' element={<Contingent />}/>
                         </Route>
 
                         <Route path='/*' element={<Home />}/>

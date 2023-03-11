@@ -1,4 +1,4 @@
-import {createContext, useContext, useState, useReducer, useEffect} from 'react';
+import React, {createContext, useContext, useState, useReducer, useEffect} from 'react';
 import ContextReducer from "./ContextReducer";
 import {postDataFromAPI} from "../data/Utils";
 
@@ -71,13 +71,16 @@ export const ContextProvider = ({ children }) => {
     });
   };
 
-  const getStaff = () => {
+  // TODO зробити getter
+  const getStaff = (pathname) => {
     const toastName = 'toastGETSTAFF';
     const API = 'CRUD_API';
     const action = 'GETSTAFF';
     setLoading('Завантажуємо співробітників ...', toastName);
     const {token} = state.user
-    const xlsId = '1jAs0Oa3vb0cNGXQB83aMvAR02aPmsI16yz5Rf59mmxI'
+      const xlsId = state.user.links.filter(obj => {
+          return obj.links.filter(ll => ll.path === pathname).length !== 0
+      })[0].links.filter(obj => obj.path === pathname)[0].id
     postDataFromAPI(API, action, {token, data:{xlsId}}).then(resp => {
       updateContext(action, resp.data);
       updateToast(resp.status, toastName);

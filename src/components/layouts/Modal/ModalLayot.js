@@ -1,4 +1,4 @@
-
+import React from "react";
 import {Button, Modal} from "react-daisyui";
 import {useStateContext} from "../../../contexts/ContextProvider";
 

@@ -1,4 +1,4 @@
-
+import React from "react";
 import { Link, NavLink } from 'react-router-dom';
 import {MdOutlineCancel} from 'react-icons/md'
 import { SiShopware } from 'react-icons/si';
@@ -52,7 +52,7 @@ const Sidebar = () => {
                 </SidebarCategoryStyles>
                 {item.links.map((link) => (
                   <NavLink
-                    to={`/${link.path}`}
+                    to={link.path}
                     key={link.path}
                     onClick={()=>{}}
                     style={({ isActive }) => ({
